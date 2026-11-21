@@ -1,0 +1,23 @@
+# Render Blueprint for the Stride AI agent backend.
+# Uses Render's FREE instance type — no charges. Free instances spin down after
+# ~15 min idle, so the first request after a pause takes ~30-60s (cold start).
+services:
+  - type: web
+    name: stride-agent
+    runtime: docker
+    plan: free
+    dockerfilePath: ./stride-agent/Dockerfile
+    dockerContext: ./stride-agent
+    healthCheckPath: /list-apps
+    # Only redeploy when backend code changes (not on frontend-only commits).
+    buildFilter:
+      paths:
+        - stride-agent/**
+    envVars:
+      # Free Gemini API key from https://aistudio.google.com/app/apikey
+      # (create it in a project WITHOUT billing). Entered in the Render
+      # dashboard — never committed.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ALLOW_ORIGINS
+        value: https://stride-financial-forecast.netlify.app,http://localhost:5173

@@ -1,0 +1,6 @@
+# Build-time settings for the Netlify frontend. Other settings (build command,
+# publish dir) stay as configured in the Netlify dashboard.
+[build.environment]
+  # Stride AI agent backend (Render free tier). Vite inlines VITE_* vars at
+  # build time, so changing this requires a rebuild.
+  VITE_AGENT_URL = "https://stride-agent-ou84.onrender.com"
