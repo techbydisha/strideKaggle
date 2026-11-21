@@ -32,4 +32,7 @@ ENV AGENT_VERSION=${AGENT_VERSION}
 
 EXPOSE 8080
 
-CMD ["uv", "run", "uvicorn", "app.fast_api_app:app", "--host", "0.0.0.0", "--port", "8080"]
+# Bind to $PORT when the host provides one (Render sets it; Cloud Run sets 8080).
+# Run uvicorn straight from the venv instead of via `uv run` to save memory on
+# small instances (e.g. Render's 512 MB free tier).
+CMD ["sh", "-c", "exec /code/.venv/bin/uvicorn app.fast_api_app:app --host 0.0.0.0 --port ${PORT:-8080}"]

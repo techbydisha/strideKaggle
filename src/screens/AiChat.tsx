@@ -50,7 +50,8 @@ export function AiChat({ inline = false }: { inline?: boolean }) {
         strategy: stride.strategy,
       };
 
-      const response = await fetch('http://localhost:8000/run', {
+      const agentBaseUrl = import.meta.env.VITE_AGENT_URL ?? 'http://localhost:8000';
+      const response = await fetch(`${agentBaseUrl}/run`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +109,7 @@ export function AiChat({ inline = false }: { inline?: boolean }) {
         {
           id: `msg_${Date.now()}_err`,
           role: 'model',
-          text: `Failed to connect to Stride AI backend: ${err.message}. Please verify the Python server is running on port 8000.`,
+          text: `Failed to connect to Stride AI backend: ${err.message}. Please verify the agent server is reachable at ${import.meta.env.VITE_AGENT_URL ?? 'http://localhost:8000'}.`,
         },
       ]);
     } finally {
